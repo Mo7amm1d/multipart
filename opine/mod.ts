@@ -4,13 +4,14 @@ import {
   NextFunction,
   OpineRequest,
   OpineResponse,
-} from "https://deno.land/x/opine@2.3.0/mod.ts";
+} from "https://deno.land/x/opine@2.3.3/mod.ts";
 
 import {
   DEFAULT_MAXIMUM_MEMORY,
   FormData,
+  FormFile,
   getBoundary,
-  getFormFiles,
+  getFormData,
 } from "../helpers.ts";
 
 export * from "../helpers.ts";
@@ -27,6 +28,10 @@ export interface MultipartOptions {
   // Defaults to false
   files?: boolean;
 
+  // Specifies whether to populate req.body.fields with array of uploaded fields.
+  // Defaults to false
+  fields?: boolean;
+
   // Provides some basic debugging.
   debug?: boolean;
 }
@@ -39,11 +44,13 @@ export default function multipartFormParser(options?: MultipartOptions) {
     maxMemory: DEFAULT_MAXIMUM_MEMORY,
     debug: false,
     files: false,
+    fields: false,
   };
 
   options.maxMemory ??= DEFAULT_MAXIMUM_MEMORY;
   options.debug ??= false;
   options.files ??= false;
+  options.fields ??= false;
 
   // Return middleware
   return async (req: OpineRequest, _res: OpineResponse, next: NextFunction) => {
