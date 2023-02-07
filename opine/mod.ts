@@ -28,7 +28,7 @@ export interface MultipartOptions {
   // Defaults to false
   files?: boolean;
 
-  // Specifies whether to populate req.body.fields with array of uploaded fields.
+  // Specifies whether to populate req.body.fields with array of form fields.
   // Defaults to false
   fields?: boolean;
 
